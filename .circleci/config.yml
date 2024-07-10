@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   dotnet: circleci/windows@5
-  docker: circleci/docker@2.6.0
+  docker: circleci/docker@1.4.0
 
 workflows:
   build-only:
