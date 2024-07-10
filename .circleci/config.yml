@@ -9,7 +9,7 @@ workflows:
     jobs:
       # - docker/check:
       #     context: barnone-backend
-      - docker/build:
+      - docker/publish:
           image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
           tag: $CIRCLE_SHA1
           attach-at: ./
