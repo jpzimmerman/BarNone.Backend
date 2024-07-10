@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   dotnet: circleci/windows@5
   docker: circleci/docker@2.6.0
+  sonar: sonarsource/sonarcloud@2.0.0
 
 jobs:
   build-and-push:
@@ -13,6 +14,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      - sonar/scan
       - docker/build:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPO
           tag: $CIRCLE_SHA1
