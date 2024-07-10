@@ -1,19 +1,19 @@
 version: 2.1
 orbs:
   dotnet: circleci/windows@5
-  docker: circleci/docker@2.0.0
+  docker: circleci/docker@2.6.0
 
 jobs:
   build-only:
     executor: docker/docker
     steps:
       - docker/check
-      - docker/publish:
-          context: barnone-backend
-          image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
-          tag: $CIRCLE_SHA1
-          attach-at: ./
-          update-description: true
+      # - docker/build:
+      #     context: barnone-backend
+      #     image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
+      #     tag: $CIRCLE_SHA1
+      #     attach-at: "./"
+      #     update-description: true
 
 workflows:
   build:
