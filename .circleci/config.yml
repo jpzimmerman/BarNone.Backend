@@ -7,7 +7,9 @@ jobs:
   build-only:
     executor: docker/docker
     steps:
-      - docker/check
+      - docker/check:
+          docker-username: $PARAM_DOCKER_USERNAME
+          docker-password: $PARAM_DOCKER_PASSWORD 
       # - docker/build:
       #     context: barnone-backend
       #     image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
