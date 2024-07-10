@@ -8,8 +8,8 @@ jobs:
     executor: docker/docker
     steps:
       - docker/check:
-          docker-username: PARAM_DOCKER_USERNAME
-          docker-password: PARAM_DOCKER_PASSWORD 
+          docker-username: DOCKER_USERNAME
+          docker-password: DOCKER_PASSWORD 
       # - docker/build:
       #     context: barnone-backend
       #     image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
