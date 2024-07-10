@@ -11,9 +11,9 @@ jobs:
           docker-username: DOCKER_USERNAME
           docker-password: DOCKER_PASSWORD 
       - docker/build:
-          image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPO
           tag: $CIRCLE_SHA1
-          attach-at: "./"
+          attach-at: ./
 
 workflows:
   build:
