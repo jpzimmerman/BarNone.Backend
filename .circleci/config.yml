@@ -9,7 +9,9 @@ jobs:
     steps:
       - docker/check:
           docker-username: DOCKER_USERNAME
-          docker-password: DOCKER_PASSWORD 
+          docker-password: DOCKER_PASSWORD
+      - checkout
+      - ls
       - docker/build:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPO
           tag: $CIRCLE_SHA1
