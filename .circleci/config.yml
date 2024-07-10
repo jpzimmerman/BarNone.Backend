@@ -10,12 +10,10 @@ jobs:
       - docker/check:
           docker-username: DOCKER_USERNAME
           docker-password: DOCKER_PASSWORD 
-      # - docker/build:
-      #     context: barnone-backend
-      #     image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
-      #     tag: $CIRCLE_SHA1
-      #     attach-at: "./"
-      #     update-description: true
+      - docker/build:
+          image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
+          tag: $CIRCLE_SHA1
+          attach-at: "./"
 
 workflows:
   build:
