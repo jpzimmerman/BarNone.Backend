@@ -7,7 +7,8 @@ orbs:
 workflows:
   build-only:
     jobs:
-      - docker/check
+      - docker/check:
+          context: barnone-backend
       - docker/build:
           image: $CIRCLE_PROJECT_USERNAME/CIRCLE_PROJECT_REPO
           tag: $CIRCLE_SHA1
