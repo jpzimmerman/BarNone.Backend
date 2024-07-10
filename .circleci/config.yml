@@ -4,7 +4,7 @@ orbs:
   docker: circleci/docker@2.6.0
 
 jobs:
-  build-only:
+  build-and-push:
     executor: docker/docker
     steps:
       - docker/check:
@@ -17,9 +17,11 @@ jobs:
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPO
           tag: $CIRCLE_SHA1
           attach-at: ./
-
+      - docker/push:
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPO
+          tag: $CIRCLE_SHA1
 workflows:
   build:
     jobs:
-      - build-only
+      - build-and-push
 
