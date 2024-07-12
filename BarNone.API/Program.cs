@@ -1,8 +1,7 @@
-using BarNone.BusinessLogic.Interfaces;
 using BarNone.BusinessLogic.Services;
 using BarNone.DataLayer;
-using System.Data;
 using MySqlConnector;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IDbConnection>(_ =>
     new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddSingleton<IDataRepository<IMenuItem>, DataRepository<IMenuItem>>();
+builder.Services.AddSingleton<IDataRepository, DataRepository>();
 builder.Services.AddSingleton<MenuDataService>();
 
 var app = builder.Build();

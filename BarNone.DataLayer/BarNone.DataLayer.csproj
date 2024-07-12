@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="9.0.0" />
     <PackageReference Include="MySqlConnector" Version="2.3.7" />
+    <ProjectReference Include="..\BarNone.Models\BarNone.Models.csproj" />
   </ItemGroup>
 
 </Project>

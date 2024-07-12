@@ -1,41 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BarNone.Models;
 using MySqlConnector;
+using System.Data;
 
 namespace BarNone.DataLayer
 {
-    public class DataRepository<T> : IDataRepository<T>
+    public class DataRepository : IDataRepository
     {
-        public IDbConnection Connection { get; private set; }
+        private readonly IDbConnection _connection;
 
         public DataRepository(IDbConnection connection) 
         {
-            Connection = connection;
+            _connection = connection;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<IMenuItem>> GetAllMenuItems()
         {
-            using (Connection) 
+            var menuItems = new List<IMenuItem>();
+
+            _connection.Open();
+            var command = new MySqlCommand("GetMenuItems", (MySqlConnection)_connection);
+            command.CommandType = CommandType.StoredProcedure;
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                Connection.Open();
+                menuItems.Add(new MenuItem
+                {
+                    Name = (string)reader.GetValue(1),
+                    Description = (string)reader.GetValue(2),
+                    Category = (string)reader.GetValue(6)
+                });
             }
-            throw new NotImplementedException();
+            _connection.Close();
+            return menuItems;
         }
 
-        public void Add(T item)
+        public async Task AddGuestOrder(GuestOrder order)
         {
-        }
-
-        public void Delete(T item)
-        {
-        }
-
-        public void Update(T item)
-        {
+            _connection.Open();
+            _connection.Close();
         }
     }
 }

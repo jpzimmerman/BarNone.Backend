@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarNone.BusinessLogic", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarNone.DataLayer", "BarNone.DataLayer\BarNone.DataLayer.csproj", "{8F710D34-6556-4B19-91A5-DF7DD6FFC670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarNone.BusinessLogicTests", "BarNone.BusinessLogicTests\BarNone.BusinessLogicTests.csproj", "{59F2AF77-57A4-475F-B5FC-8389B8BDF734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarNone.BusinessLogicTests", "BarNone.BusinessLogicTests\BarNone.BusinessLogicTests.csproj", "{59F2AF77-57A4-475F-B5FC-8389B8BDF734}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{04506AA7-7E15-4134-B56D-D6474B9ADB13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarNone.DataLayerTests", "BarNone.DataLayerTests\BarNone.DataLayerTests.csproj", "{7B67F1B0-7E40-4308-A944-82D620722318}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarNone.DataLayerTests", "BarNone.DataLayerTests\BarNone.DataLayerTests.csproj", "{7B67F1B0-7E40-4308-A944-82D620722318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarNone.APITests", "BarNone.APITests\BarNone.APITests.csproj", "{2D592410-5819-444F-A277-CE90BBB9652F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarNone.APITests", "BarNone.APITests\BarNone.APITests.csproj", "{2D592410-5819-444F-A277-CE90BBB9652F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarNone.Models", "BarNone.Models\BarNone.Models.csproj", "{102CD271-CE1D-40EE-903E-69D00C436479}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{2D592410-5819-444F-A277-CE90BBB9652F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D592410-5819-444F-A277-CE90BBB9652F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D592410-5819-444F-A277-CE90BBB9652F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102CD271-CE1D-40EE-903E-69D00C436479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{102CD271-CE1D-40EE-903E-69D00C436479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{102CD271-CE1D-40EE-903E-69D00C436479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{102CD271-CE1D-40EE-903E-69D00C436479}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

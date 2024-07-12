@@ -11,6 +11,7 @@ RUN dir
 RUN ls
 COPY ["./BarNone.API/BarNone.API.csproj", "BarNone.API/"]
 COPY ["./BarNone.BusinessLogic/BarNone.BusinessLogic.csproj", "BarNone.BusinessLogic/"]
+COPY ["./BarNone.Models/BarNone.Models.csproj", "BarNone.Models/"]
 COPY ["./BarNone.DataLayer/BarNone.DataLayer.csproj", "BarNone.DataLayer/"]
 RUN dotnet restore "BarNone.API/BarNone.API.csproj"
 COPY . .

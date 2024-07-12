@@ -1,13 +1,10 @@
-﻿using System.Data;
+﻿using BarNone.Models;
 
 namespace BarNone.DataLayer
 {
-    public interface IDataRepository<T>
+    public interface IDataRepository
     {
-        public IDbConnection Connection { get; }
-        Task<IEnumerable<T>> GetAll();
-        void Add(T item);
-        void Update(T item);
-        void Delete(T item);
+        Task<IEnumerable<IMenuItem>> GetAllMenuItems();
+        Task AddGuestOrder(GuestOrder order);
     }
 }

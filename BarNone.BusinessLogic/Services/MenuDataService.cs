@@ -1,54 +1,22 @@
-﻿using BarNone.BusinessLogic.Interfaces;
-using BarNone.BusinessLogic.Models;
-using BarNone.DataLayer;
+﻿using BarNone.DataLayer;
+using BarNone.Models;
 using MySqlConnector;
-using System.Data;
-using System.Security.Cryptography;
 
 namespace BarNone.BusinessLogic.Services
 {
     public class MenuDataService
     {
-        private readonly IDataRepository<IMenuItem> _dataRepository;
+        private readonly IDataRepository _dataRepository;
 
-        public MenuDataService(IDataRepository<IMenuItem> dataRepository) 
+        public MenuDataService(IDataRepository dataRepository) 
         {
             _dataRepository = dataRepository;
         }
-        public async Task<IEnumerable<IMenuItem>> GetAllMenuItems()
-        { 
-            var menuItems = new List<IMenuItem>();
+        public async Task<IEnumerable<IMenuItem>> GetAllMenuItems() =>await _dataRepository.GetAllMenuItems();
 
-            using (var connection = new MySqlConnection(_dataRepository.Connection.ConnectionString))
-            {
-                connection.Open();
-                var command = new MySqlCommand("SELECT * FROM drinks;", connection);
-                using var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    menuItems.Add(new MenuItem
-                    {
-                        Name = (string)reader.GetValue(1),
-                        Description = (string)reader.GetValue(2),
-                        Category = (string)reader.GetValue(6)
-                    });
-                }
-            }
-            return menuItems;
-        }
-
-        public async Task AddMenuItemsToOrder(IMenuItem menuItem)
+        public async Task AddOrder(GuestOrder order)
         {
-            using (var connection = new MySqlConnection(_dataRepository.Connection.ConnectionString))
-            {
-                connection.Open();
-                var command = new MySqlCommand("INSERT INTO cocktails.drinks (Name, Description, IngredientIDs, Category) VALUES(@name, @description, '', @Category)", connection);
-                command.Parameters.Add(new MySqlParameter("@name", menuItem.Name));
-                command.Parameters.Add(new MySqlParameter("@description", menuItem.Description));
-                command.Parameters.Add(new MySqlParameter("@category", menuItem.Category));
-                using var reader = await command.ExecuteReaderAsync();
-            }
-            
+            await _dataRepository.AddGuestOrder(order);
         }
     }
 }
