@@ -18,8 +18,10 @@ namespace BarNone.DataLayer
             var menuItems = new List<IMenuItem>();
 
             _connection.Open();
-            var command = new MySqlCommand("GetMenuItems", (MySqlConnection)_connection);
-            command.CommandType = CommandType.StoredProcedure;
+            var command = new MySqlCommand("GetMenuItems", (MySqlConnection)_connection) 
+            {
+                CommandType = CommandType.StoredProcedure
+            };
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
@@ -36,8 +38,22 @@ namespace BarNone.DataLayer
 
         public async Task AddGuestOrder(GuestOrder order)
         {
+            var command = new MySqlCommand("AddGuestOrder", (MySqlConnection)_connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            command.Parameters.AddWithValue("@nameForOrder", order.Name);
+            command.Parameters.AddWithValue("@total", order.Total);
+            command.Parameters.AddWithValue("@specialInstructions", order.SpecialInstructions);
             _connection.Open();
+            var result = await command.ExecuteNonQueryAsync();
             _connection.Close();
+        }
+
+        public Task AddOrderItems(IEnumerable<IMenuItem> orderItems)
+        {
+            // TODO: use bulk add to add order items to map table in DB 
+            throw new NotImplementedException();
         }
     }
 }

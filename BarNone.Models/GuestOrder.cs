@@ -8,15 +8,18 @@ namespace BarNone.Models
         public string OrderId { get; set; } = string.Empty;
 
         [JsonPropertyName("name")]
-        private string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+
+        [JsonPropertyName("specialInstructions")]
+        public string SpecialInstructions {  get; set; } = string.Empty;
 
         [JsonPropertyName("loyaltyProgramId")]
-        private string LoyaltyProgramId { get; set; } = string.Empty;
+        public string LoyaltyProgramId { get; set; } = string.Empty;
 
         [JsonPropertyName("items")]
-        private IEnumerable<IMenuItem> Items { get; set; } = Enumerable.Empty<IMenuItem>();
+        public IEnumerable<IMenuItem> Items { get; set; } = Enumerable.Empty<IMenuItem>();
 
         [JsonPropertyName("Total")]
-        private float Total {  get; set; }
+        public float Total {  get; set; }
     }
 }
