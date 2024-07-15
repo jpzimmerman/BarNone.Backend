@@ -17,11 +17,11 @@ namespace BarNone.DataLayer
         {
             var menuItems = new List<IMenuItem>();
 
-            _connection.Open();
-            var command = new MySqlCommand("GetMenuItems", (MySqlConnection)_connection) 
+            var command = new MySqlCommand(Constants.GetMenuItemsSp, (MySqlConnection)_connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
+            _connection.Open();
             using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
@@ -38,22 +38,65 @@ namespace BarNone.DataLayer
 
         public async Task AddGuestOrder(GuestOrder order)
         {
-            var command = new MySqlCommand("AddGuestOrder", (MySqlConnection)_connection)
+            var orderId = ulong.MinValue;
+
+            var command = new MySqlCommand(Constants.AddGuestOrderSp, (MySqlConnection)_connection)
             {
                 CommandType = CommandType.StoredProcedure
             };
+
+            var orderIdCommand = new MySqlCommand("SELECT LAST_INSERT_ID()", (MySqlConnection)_connection) 
+            { 
+                CommandType = CommandType.Text 
+            };
+
             command.Parameters.AddWithValue("@nameForOrder", order.Name);
             command.Parameters.AddWithValue("@total", order.Total);
             command.Parameters.AddWithValue("@specialInstructions", order.SpecialInstructions);
-            _connection.Open();
-            var result = await command.ExecuteNonQueryAsync();
-            _connection.Close();
+
+            try
+            {
+                _connection.Open();
+                await command.ExecuteNonQueryAsync();
+                orderId = (ulong)(await orderIdCommand.ExecuteScalarAsync());
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+            await AddOrderItems(orderId, order.Items);
         }
 
-        public Task AddOrderItems(IEnumerable<IMenuItem> orderItems)
+        private async Task AddOrderItems(ulong orderId, IEnumerable<IMenuItem> orderItems)
         {
-            // TODO: use bulk add to add order items to map table in DB 
-            throw new NotImplementedException();
+            var bulkCopy = new MySqlBulkCopy((MySqlConnection)_connection)
+            {
+                DestinationTableName = "orders_cocktails",
+            };
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("ItemId", typeof(int));
+            dataTable.Columns.Add("OrderId", typeof(int));
+            dataTable.Columns.Add("DrinkId", typeof(int));
+            dataTable.Columns.Add("SpecialInstructions", typeof(String));
+
+            foreach (var item in orderItems) 
+            {
+                var itemCopy = dataTable.NewRow();
+                itemCopy["OrderId"] = orderId;
+                itemCopy["DrinkId"] = item.Id;
+                itemCopy["SpecialInstructions"] = item.SpecialInstructions;
+                dataTable.Rows.Add(itemCopy);
+            }
+            try
+            {
+                _connection.Open();
+                await bulkCopy.WriteToServerAsync(dataTable);
+            }
+            finally
+            {
+                _connection.Close();
+            }   
         }
     }
 }

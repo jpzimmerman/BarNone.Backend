@@ -4,11 +4,17 @@ namespace BarNone.Models
 {
     public interface IMenuItem
     {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
         [JsonPropertyName("description")]
         public string Description { get; set; }
+
+        [JsonPropertyName("SpecialInstructions")]
+        public string SpecialInstructions { get; set; }
 
         [JsonPropertyName("ingredients")]
         public List<string> Ingredients { get; set; }
@@ -21,5 +27,6 @@ namespace BarNone.Models
 
         [JsonPropertyName("category")]
         public string Category { get; set; }
+
     }
 }

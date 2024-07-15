@@ -6,6 +6,5 @@ namespace BarNone.DataLayer
     {
         Task<IEnumerable<IMenuItem>> GetAllMenuItems();
         Task AddGuestOrder(GuestOrder order);
-        Task AddOrderItems(IEnumerable<IMenuItem> orderItems);
     }
 }

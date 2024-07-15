@@ -5,7 +5,7 @@ namespace BarNone.Models
     public class GuestOrder
     {
         [JsonPropertyName("orderId")]
-        public string OrderId { get; set; } = string.Empty;
+        public int OrderId { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
@@ -17,9 +17,9 @@ namespace BarNone.Models
         public string LoyaltyProgramId { get; set; } = string.Empty;
 
         [JsonPropertyName("items")]
-        public IEnumerable<IMenuItem> Items { get; set; } = Enumerable.Empty<IMenuItem>();
+        public IEnumerable<MenuItem> Items { get; set; } = Enumerable.Empty<MenuItem>();
 
-        [JsonPropertyName("Total")]
+        [JsonPropertyName("total")]
         public float Total {  get; set; }
     }
 }
