@@ -1,5 +1,6 @@
 ﻿using BarNone.BusinessLogic.Services;
 using BarNone.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarNone.API.Controllers
@@ -15,9 +16,9 @@ namespace BarNone.API.Controllers
             _menuDataService = menuDataService;
         }
 
-        [HttpPut]
+        [HttpPut, EnableCors]
         [Route("AddOrder")]
-        public async Task AddOrder(GuestOrder order)
+        public async Task AddOrder([FromBody]GuestOrder order)
         {
             await _menuDataService.AddOrder(order);
         }

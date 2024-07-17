@@ -4,7 +4,7 @@ namespace BarNone.Models
 {
     public class MenuItem : IMenuItem
     {
-        [JsonPropertyName("Id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
         public string Name { get; set; } = string.Empty;

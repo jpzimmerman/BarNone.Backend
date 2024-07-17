@@ -1,5 +1,6 @@
 ﻿using BarNone.BusinessLogic.Services;
 using BarNone.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarNone.API.Controllers
