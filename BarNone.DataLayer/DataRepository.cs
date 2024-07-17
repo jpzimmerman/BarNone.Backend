@@ -28,9 +28,9 @@ namespace BarNone.DataLayer
                 menuItems.Add(new MenuItem
                 {
                     Id = reader.GetInt32(0),
-                    Name = (string)reader.GetValue(1),
-                    Description = (string)reader.GetValue(2),
-                    Category = (string)reader.GetValue(6)
+                    Name = reader.GetString(1),
+                    Description = reader.GetString(2),
+                    Category = reader.GetString(6)
                 });
             }
             _connection.Close();
