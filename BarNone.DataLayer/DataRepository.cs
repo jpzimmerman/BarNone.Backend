@@ -30,6 +30,7 @@ namespace BarNone.DataLayer
                     Id = reader.GetInt32(0),
                     Name = reader.GetString(1),
                     Description = reader.GetString(2),
+                    Price = reader.GetFloat(4),
                     Category = reader.GetString(6)
                 });
             }

@@ -16,7 +16,7 @@ namespace BarNone.API.Controllers
             _menuDataService = menuDataService;
         }
 
-        [HttpPut, EnableCors]
+        [HttpPut]
         [Route("AddOrder")]
         public async Task AddOrder([FromBody]GuestOrder order)
         {
