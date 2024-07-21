@@ -100,5 +100,23 @@ namespace BarNone.DataLayer
                 _connection.Close();
             }   
         }
+
+        public async Task<IEnumerable<string>> GetTags()
+        {
+            var menuItems = new List<string>();
+
+            var command = new MySqlCommand(Constants.GetTagsSp, (MySqlConnection)_connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            _connection.Open();
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                menuItems.Add(reader.GetString(0));
+            }
+            _connection.Close();
+            return menuItems;
+        }
     }
 }

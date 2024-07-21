@@ -29,5 +29,15 @@ namespace BarNone.API.Controllers
             var menuItems = await _menuDataService.GetAllMenuItems(); 
             return Ok(menuItems);
         }
+
+        [HttpGet]
+        [Route("GetTags")]
+        public async Task<ActionResult<List<string>>> GetTags()
+        {
+            var tags = await _menuDataService.GetTags();
+            return Ok(tags);
+        }
+
+
     }
 }
