@@ -8,7 +8,7 @@ namespace BarNone.DataLayer
     {
         private readonly IDbConnection _connection;
 
-        public DataRepository(IDbConnection connection) 
+        public DataRepository(IDbConnection connection)
         {
             _connection = connection;
         }
@@ -17,54 +17,61 @@ namespace BarNone.DataLayer
         {
             var menuItems = new List<IMenuItem>();
 
-            var command = new MySqlCommand(Constants.GetMenuItemsSp, (MySqlConnection)_connection)
+            using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
-                CommandType = CommandType.StoredProcedure
-            };
-            _connection.Open();
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                menuItems.Add(new MenuItem
+                var command = new MySqlCommand(Constants.GetMenuItemsSp, connection)
                 {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1),
-                    Description = reader.GetString(2),
-                    Price = reader.GetFloat(4),
-                    Category = reader.GetString(6)
-                });
+                    CommandType = CommandType.StoredProcedure
+                };
+                connection.Open();
+                using var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    menuItems.Add(new MenuItem
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.GetString(1),
+                        Description = reader.GetString(2),
+                        Price = reader.GetFloat(4),
+                        Category = reader.GetString(6)
+                    });
+                }
             }
-            _connection.Close();
+
             return menuItems;
         }
 
         public async Task AddGuestOrder(GuestOrder order)
         {
             var orderId = ulong.MinValue;
-
-            var command = new MySqlCommand(Constants.AddGuestOrderSp, (MySqlConnection)_connection)
+            using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
-                CommandType = CommandType.StoredProcedure
-            };
+                var command = new MySqlCommand(Constants.AddGuestOrderSp, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                var orderIdCommand = new MySqlCommand("SELECT LAST_INSERT_ID()", connection)
+                {
+                    CommandType = CommandType.Text
+                };
 
-            var orderIdCommand = new MySqlCommand("SELECT LAST_INSERT_ID()", (MySqlConnection)_connection) 
-            { 
-                CommandType = CommandType.Text 
-            };
-
-            command.Parameters.AddWithValue("@nameForOrder", order.Name);
-            command.Parameters.AddWithValue("@total", order.Total);
-            command.Parameters.AddWithValue("@specialInstructions", order.SpecialInstructions);
-
-            try
-            {
-                _connection.Open();
-                await command.ExecuteNonQueryAsync();
-                orderId = (ulong)(await orderIdCommand.ExecuteScalarAsync());
-            }
-            finally
-            {
-                _connection.Close();
+                command.Parameters.AddWithValue("@nameForOrder", order.Name);
+                command.Parameters.AddWithValue("@total", order.Total);
+                command.Parameters.AddWithValue("@specialInstructions", order.SpecialInstructions);
+                try
+                {
+                    connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                    orderId = (ulong)(await orderIdCommand.ExecuteScalarAsync());
+                }
+                catch (Exception ex)
+                { 
+                    Console.WriteLine($"AddGuestOrder() error: {ex.Message}");
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
             }
 
             await AddOrderItems(orderId, order.Items);
@@ -72,50 +79,71 @@ namespace BarNone.DataLayer
 
         private async Task AddOrderItems(ulong orderId, IEnumerable<IMenuItem> orderItems)
         {
-            var bulkCopy = new MySqlBulkCopy((MySqlConnection)_connection)
+            using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
-                DestinationTableName = "orders_cocktails",
-            };
-            var dataTable = new DataTable();
-            dataTable.Columns.Add("ItemId", typeof(int));
-            dataTable.Columns.Add("OrderId", typeof(int));
-            dataTable.Columns.Add("DrinkId", typeof(int));
-            dataTable.Columns.Add("SpecialInstructions", typeof(String));
+                var bulkCopy = new MySqlBulkCopy(connection)
+                {
+                    DestinationTableName = "orders_cocktails",
+                };
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ItemId", typeof(int));
+                dataTable.Columns.Add("OrderId", typeof(int));
+                dataTable.Columns.Add("DrinkId", typeof(int));
+                dataTable.Columns.Add("SpecialInstructions", typeof(String));
+                Parallel.ForEach(orderItems, item =>
+                {
+                    var itemCopy = dataTable.NewRow();
+                    itemCopy["OrderId"] = orderId;
+                    itemCopy["DrinkId"] = item.Id;
+                    itemCopy["SpecialInstructions"] = item.SpecialInstructions;
+                    dataTable.Rows.Add(itemCopy);
+                });
+                try
+                {
+                    connection.Open();
+                    await bulkCopy.WriteToServerAsync(dataTable);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"AddOrderItems() error: {ex.Message}");
+                }
+                finally 
+                {
+                    await connection.CloseAsync();
+                }
+            }
 
-            foreach (var item in orderItems) 
-            {
-                var itemCopy = dataTable.NewRow();
-                itemCopy["OrderId"] = orderId;
-                itemCopy["DrinkId"] = item.Id;
-                itemCopy["SpecialInstructions"] = item.SpecialInstructions;
-                dataTable.Rows.Add(itemCopy);
-            }
-            try
-            {
-                _connection.Open();
-                await bulkCopy.WriteToServerAsync(dataTable);
-            }
-            finally
-            {
-                _connection.Close();
-            }   
         }
 
         public async Task<IEnumerable<string>> GetTags()
         {
             var menuItems = new List<string>();
 
-            var command = new MySqlCommand(Constants.GetTagsSp, (MySqlConnection)_connection)
+            using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
-                CommandType = CommandType.StoredProcedure
-            };
-            _connection.Open();
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                menuItems.Add(reader.GetString(0));
+                var command = new MySqlCommand(Constants.GetTagsSp, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                try
+                {
+                    connection.Open();
+                    using var reader = await command.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        menuItems.Add(reader.GetString(0));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"GetTags() error: {ex.Message}");
+                }
+                finally 
+                {
+                    await connection.CloseAsync();
+                }
             }
-            _connection.Close();
+
             return menuItems;
         }
     }
