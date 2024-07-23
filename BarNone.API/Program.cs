@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IDbConnection>(_ =>
-    new MySqlConnection(builder.Configuration.GetConnectionString("Default")));
+    new MySqlConnection(Environment.GetEnvironmentVariable("DB_CONNECTION")));
 builder.Services.AddSingleton<IDataRepository, DataRepository>();
 builder.Services.AddSingleton<MenuDataService>();
 
