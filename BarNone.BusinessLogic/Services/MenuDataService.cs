@@ -18,5 +18,7 @@ namespace BarNone.BusinessLogic.Services
         public async Task AddOrder(GuestOrder order) => await _dataRepository.AddGuestOrder(order);
 
         public async Task<IEnumerable<string>> GetTags() => await _dataRepository.GetTags();
+
+        public async Task AddInventoryItem(Ingredient item) => await _dataRepository.AddInventoryItem(item);
     }
 }

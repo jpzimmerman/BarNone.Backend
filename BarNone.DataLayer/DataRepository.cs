@@ -146,5 +146,9 @@ namespace BarNone.DataLayer
 
             return menuItems;
         }
+
+        public async Task AddInventoryItem(Ingredient item)
+        { 
+        }
     }
 }
