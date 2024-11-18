@@ -10,6 +10,11 @@ namespace BarNone.API.Controllers
     {
         private readonly MenuDataService _menuDataService;
 
+        public InventoryController(MenuDataService menuDataService)
+        {
+            _menuDataService = menuDataService;
+        }
+
         [HttpGet]
         public string Index()
         {
@@ -17,8 +22,9 @@ namespace BarNone.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> AddInventoryItem(Ingredient data)
+        public async Task AddInventoryItem([FromBody]Ingredient data)
         {
+            await _menuDataService.AddInventoryItem(data);
         }
     }
 }

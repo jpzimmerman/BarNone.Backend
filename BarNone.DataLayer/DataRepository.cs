@@ -1,5 +1,6 @@
 ﻿using BarNone.Models;
 using MySqlConnector;
+using Mysqlx.Crud;
 using System.Data;
 
 namespace BarNone.DataLayer
@@ -148,7 +149,32 @@ namespace BarNone.DataLayer
         }
 
         public async Task AddInventoryItem(Ingredient item)
-        { 
+        {
+            using (var connection = new MySqlConnection(_connection.ConnectionString))
+            {
+                var command = new MySqlCommand(Constants.AddGuestOrderSp, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                command.Parameters.AddWithValue("@name", item.Name);
+                command.Parameters.AddWithValue("@description", item.Description);
+                command.Parameters.AddWithValue("@isAlcoholic", item.IsAlcoholic);
+
+                try
+                {
+                    connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"AddInventoryItem() error: {ex.Message}");
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
         }
     }
 }
