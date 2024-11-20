@@ -7,6 +7,6 @@ namespace BarNone.DataLayer
         Task<IEnumerable<IMenuItem>> GetAllMenuItems();
         Task AddGuestOrder(GuestOrder order);
         Task<IEnumerable<string>> GetTags();
-        Task AddInventoryItem(Ingredient item);
+        Task AddItem(string storedProcedureName, Dictionary<string, object> parameters);
     }
 }

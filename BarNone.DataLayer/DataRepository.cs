@@ -148,18 +148,18 @@ namespace BarNone.DataLayer
             return menuItems;
         }
 
-        public async Task AddInventoryItem(Ingredient item)
+        public async Task AddItem(string storedProcedureName, Dictionary<string, object> parameters) 
         {
             using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
-                var command = new MySqlCommand(Constants.AddGuestOrderSp, connection)
+                var command = new MySqlCommand(storedProcedureName, connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-
-                command.Parameters.AddWithValue("@name", item.Name);
-                command.Parameters.AddWithValue("@description", item.Description);
-                command.Parameters.AddWithValue("@isAlcoholic", item.IsAlcoholic);
+                foreach (var paramKeyValuePair in parameters)
+                { 
+                    command.Parameters.AddWithValue(paramKeyValuePair.Key, paramKeyValuePair.Value);
+                }
 
                 try
                 {
@@ -168,7 +168,7 @@ namespace BarNone.DataLayer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"AddInventoryItem() error: {ex.Message}");
+                    Console.WriteLine($"AddItem() (procedure name: {storedProcedureName}) error: {ex.Message}");
                 }
                 finally
                 {

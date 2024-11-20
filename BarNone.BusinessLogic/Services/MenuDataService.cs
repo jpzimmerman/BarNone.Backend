@@ -1,6 +1,8 @@
 ﻿using BarNone.DataLayer;
 using BarNone.Models;
 using MySqlConnector;
+using System.Data;
+using System.Runtime.InteropServices;
 
 namespace BarNone.BusinessLogic.Services
 {
@@ -19,6 +21,16 @@ namespace BarNone.BusinessLogic.Services
 
         public async Task<IEnumerable<string>> GetTags() => await _dataRepository.GetTags();
 
-        public async Task AddInventoryItem(Ingredient item) => await _dataRepository.AddInventoryItem(item);
+        public async Task AddInventoryItem(Ingredient item)
+        {
+            var parameters = new Dictionary<string, object>() 
+            {
+                {"@name", item.Name},
+                {"@description", item.Description},
+                {"@isAlcoholic", item.IsAlcoholic}
+            };
+            await _dataRepository.AddItem(Constants.AddGuestOrderSp, parameters);
+
+        }
     }
 }
