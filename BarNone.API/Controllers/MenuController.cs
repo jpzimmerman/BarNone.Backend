@@ -26,7 +26,7 @@ namespace BarNone.API.Controllers
         [Route("GetMenuItems")]
         public async Task<ActionResult<List<MenuItem>>> GetMenuItems()
         {
-            var menuItems = await _menuDataService.GetAllMenuItems(); 
+            var menuItems = await _menuDataService.GetAllMenuItems();
             return Ok(menuItems);
         }
 

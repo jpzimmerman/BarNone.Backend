@@ -34,7 +34,8 @@ namespace BarNone.DataLayer
                         Name = reader.GetString(1),
                         Description = reader.GetString(2),
                         Price = reader.GetFloat(4),
-                        Category = reader.GetString(6)
+                        Category = reader.GetString(6),
+                        Tags = new string[] { "Sweet", "Citrusy"}
                     });
                 }
             }
@@ -63,7 +64,7 @@ namespace BarNone.DataLayer
                 {
                     connection.Open();
                     await command.ExecuteNonQueryAsync();
-                    orderId = (ulong)(await orderIdCommand.ExecuteScalarAsync());
+                    orderId = (ulong)await orderIdCommand.ExecuteScalarAsync();
                 }
                 catch (Exception ex)
                 { 
@@ -146,6 +147,43 @@ namespace BarNone.DataLayer
             }
 
             return menuItems;
+        }
+
+        public async Task<IEnumerable<TagCocktailMapItem>> GetTagCocktailMap()
+        {
+            var tagsCocktailsEntries = new List<TagCocktailMapItem>();
+
+            using (var connection = new MySqlConnection(_connection.ConnectionString))
+            {
+                var command = new MySqlCommand(Constants.GetTagCocktailMapSp, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                try
+                {
+                    connection.Open();
+                    using var reader = await command.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        tagsCocktailsEntries.Add(new TagCocktailMapItem
+                        {
+                            TagId = reader.GetInt32(0),
+                            DrinkId = reader.GetInt32(1),
+                            TagName = reader.GetString(2)
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"GetTagsCocktailsMap() error: {ex.Message}");
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+
+            return tagsCocktailsEntries;
         }
 
         public async Task AddItem(string storedProcedureName, Dictionary<string, object> parameters) 
