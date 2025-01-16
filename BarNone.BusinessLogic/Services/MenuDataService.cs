@@ -1,9 +1,7 @@
 ﻿using BarNone.BusinessLogic.Builders;
 using BarNone.DataLayer;
 using BarNone.Models;
-using MySqlConnector;
 using System.Data;
-using System.Runtime.InteropServices;
 
 namespace BarNone.BusinessLogic.Services
 {
@@ -23,7 +21,7 @@ namespace BarNone.BusinessLogic.Services
 
             foreach (var menuItem in menuItems)
             {
-                MenuItemBuilder builder = new MenuItemBuilder(menuItem);
+                MenuItemBuilder builder = new(menuItem);
                 IEnumerable<string> itemTags =
                     from entry in tagsCocktailsMap
                     where entry.DrinkId == menuItem.Id

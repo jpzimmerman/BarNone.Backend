@@ -1,6 +1,5 @@
 ﻿using BarNone.Models;
 using MySqlConnector;
-using Mysqlx.Crud;
 using System.Data;
 
 namespace BarNone.DataLayer
