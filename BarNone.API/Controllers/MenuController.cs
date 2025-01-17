@@ -1,6 +1,7 @@
 ﻿using BarNone.BusinessLogic.Services;
 using BarNone.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BarNone.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace BarNone.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Retrieves all menu items.")]
         [Route("GetMenuItems")]
         public async Task<ActionResult<List<MenuItem>>> GetMenuItems()
         {
@@ -30,6 +32,7 @@ namespace BarNone.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Retrieves all tags for menu items.")]
         [Route("GetTags")]
         public async Task<ActionResult<List<string>>> GetTags()
         {

@@ -9,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => 
+{
+    c.EnableAnnotations();
+});
 builder.Services.AddTransient<IDbConnection>(_ =>
     new MySqlConnection(Environment.GetEnvironmentVariable("DB_CONNECTION")));
 builder.Services.AddSingleton<IDataRepository, DataRepository>();
