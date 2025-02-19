@@ -18,5 +18,8 @@ namespace BarNone.Models
 
         [JsonPropertyName("isAlcoholic")]
         public bool IsAlcoholic { get; set; }
+
+        [JsonPropertyName("barcode")]
+        public string Barcode { get; set; }
     }
 }

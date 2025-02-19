@@ -21,6 +21,13 @@ namespace BarNone.API.Controllers
             return "Inventory page endpoint reached";
         }
 
+        [HttpGet]
+        [Route("GetInventoryItems")]
+        public List<Ingredient> GetInventoryItems()
+        {
+            return new List<Ingredient>();
+        }
+
         [HttpPut]
         public async Task AddInventoryItem([FromBody]Ingredient data)
         {
