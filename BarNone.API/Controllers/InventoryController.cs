@@ -22,7 +22,7 @@ namespace BarNone.API.Controllers
         [Route("GetInventoryItems")]
         public async Task<IEnumerable<Ingredient>> GetInventoryItems() => await _inventoryDataService.GetInventoryItems();
 
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         [HttpPut]
         [Route("AddInventoryItem")]
         public async Task AddInventoryItem([FromBody]Ingredient data)

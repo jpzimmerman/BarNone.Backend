@@ -23,8 +23,8 @@ namespace BarNone.BusinessLogic.Services
         {
             var parameters = new Dictionary<string, object>()
             {
-                {"@name", item.Name},
-                {"@description", item.Description},
+                {"@itemName", item.Name},
+                {"@itemDescription", item.Description},
                 {"@isAlcoholic", item.IsAlcoholic}
             };
             await _dataRepository.AddItem(Constants.AddInventoryItemSp, parameters);
