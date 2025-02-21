@@ -25,18 +25,7 @@ namespace BarNone.API.Controllers
 
         [HttpGet]
         [Route("GetInventoryItems")]
-        public async Task<IEnumerable<Ingredient>> GetInventoryItems()
-        {
-            //return new List<Ingredient>()
-            //{
-            //    new Ingredient() {Name="Vodka", Quantity=6, IsAlcoholic=true},
-            //    new Ingredient() {Name="Tequila", Quantity=4, IsAlcoholic=true},
-            //    new Ingredient() {Name="White Rum", Quantity=3 ,IsAlcoholic=true},
-            //    new Ingredient() {Name="Spiced Rum", Quantity=2, IsAlcoholic=true},
-            //    new Ingredient() {Name="Grenadine", Quantity=4, IsAlcoholic=false},
-            //};
-            return await _inventoryDataService.GetInventoryItems();
-        }
+        public async Task<IEnumerable<Ingredient>> GetInventoryItems() => await _inventoryDataService.GetInventoryItems();
 
         [Authorize(Policy = "AdminOnly")]
         [HttpPut]
