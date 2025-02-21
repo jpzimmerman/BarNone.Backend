@@ -7,14 +7,9 @@ namespace BarNone.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/")]
-    public class MenuController : Controller
+    public class MenuController(MenuDataService menuDataService) : Controller
     {
-        private readonly MenuDataService _menuDataService;
-
-        public MenuController(MenuDataService menuDataService) 
-        {
-            _menuDataService = menuDataService;
-        }
+        private readonly MenuDataService _menuDataService = menuDataService;
 
         [HttpGet]
         public string Index()

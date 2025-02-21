@@ -8,14 +8,9 @@ namespace BarNone.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/")]
-    public class InventoryController : Controller
+    public class InventoryController(InventoryDataService inventoryDataService) : Controller
     {
-        private readonly InventoryDataService _inventoryDataService;
-
-        public InventoryController(InventoryDataService inventoryDataService)
-        {
-            _inventoryDataService = inventoryDataService;
-        }
+        private readonly InventoryDataService _inventoryDataService = inventoryDataService;
 
         [HttpGet]
         public string Index()
