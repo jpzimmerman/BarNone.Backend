@@ -20,6 +20,6 @@ namespace BarNone.Models
         public bool IsAlcoholic { get; set; }
 
         [JsonPropertyName("barcode")]
-        public string Barcode { get; set; }
+        public string Barcode { get; set; } = string.Empty;
     }
 }

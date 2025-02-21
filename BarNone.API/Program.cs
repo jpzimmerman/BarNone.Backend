@@ -29,8 +29,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddTransient<IDbConnection>(_ =>
     new MySqlConnection(Environment.GetEnvironmentVariable("DB_CONNECTION")));
-builder.Services.AddSingleton<IDataRepository, DataRepository>();
+builder.Services.AddSingleton<IMenuDataRepository, MenuDataRepository>();
+builder.Services.AddSingleton<BarInventoryDataRepository, BarInventoryDataRepository>();
 builder.Services.AddSingleton<MenuDataService>();
+builder.Services.AddSingleton<InventoryDataService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie("Cookies", options =>
     {

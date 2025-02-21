@@ -7,9 +7,9 @@ namespace BarNone.BusinessLogic.Services
 {
     public class MenuDataService
     {
-        private readonly IDataRepository _dataRepository;
+        private readonly IMenuDataRepository _dataRepository;
 
-        public MenuDataService(IDataRepository dataRepository)
+        public MenuDataService(IMenuDataRepository dataRepository)
         {
             _dataRepository = dataRepository;
         }
@@ -35,17 +35,5 @@ namespace BarNone.BusinessLogic.Services
         public async Task AddOrder(GuestOrder order) => await _dataRepository.AddGuestOrder(order);
 
         public async Task<IEnumerable<string>> GetTags() => await _dataRepository.GetTags();
-
-        public async Task AddInventoryItem(Ingredient item)
-        {
-            var parameters = new Dictionary<string, object>() 
-            {
-                {"@name", item.Name},
-                {"@description", item.Description},
-                {"@isAlcoholic", item.IsAlcoholic}
-            };
-            await _dataRepository.AddItem(Constants.AddGuestOrderSp, parameters);
-
-        }
     }
 }
