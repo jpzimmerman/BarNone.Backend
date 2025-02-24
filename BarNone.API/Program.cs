@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddTransient<IDbConnection>(_ =>
     new MySqlConnection(Environment.GetEnvironmentVariable("DB_CONNECTION")));
-builder.Services.AddSingleton<IMenuDataRepository, MenuDataRepository>();
+builder.Services.AddSingleton<IMenuDataRepository, MenuMsDataRepository>();
 builder.Services.AddSingleton<BarInventoryDataRepository, BarInventoryDataRepository>();
 builder.Services.AddSingleton<MenuDataService>();
 builder.Services.AddSingleton<InventoryDataService>();
