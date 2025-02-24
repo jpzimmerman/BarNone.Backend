@@ -129,7 +129,7 @@ namespace BarNone.DataLayer
 
         public async Task<IEnumerable<string>> GetTags()
         {
-            var menuItems = new List<string>();
+            var tagList = new List<string>();
 
             using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
@@ -144,7 +144,7 @@ namespace BarNone.DataLayer
                     using var reader = await command.ExecuteReaderAsync();
                     while (await reader.ReadAsync())
                     {
-                        menuItems.Add(reader.GetString(0));
+                        tagList.Add(reader.GetString(0));
                     }
                 }
                 catch (Exception ex)
@@ -156,7 +156,7 @@ namespace BarNone.DataLayer
                     await connection.CloseAsync();
                 }
             }
-            return menuItems;
+            return tagList;
 
         }
 

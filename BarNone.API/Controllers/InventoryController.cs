@@ -1,8 +1,6 @@
 ﻿using BarNone.BusinessLogic.Services;
 using BarNone.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace BarNone.API.Controllers
 {

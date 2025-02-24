@@ -84,9 +84,36 @@ namespace BarNone.DataLayer
             return tagsCocktailsEntries;
         }
 
-        public Task<IEnumerable<string>> GetTags()
+        public async Task<IEnumerable<string>> GetTags()
         {
-            throw new NotImplementedException();
+            var tagList = new List<string>();
+
+            using (var connection = new SqlConnection(_connection.ConnectionString))
+            {
+
+                var command = new SqlCommand(Constants.GetTagsSp, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                try
+                {
+                    connection.Open();
+                    using var reader = await command.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        tagList.Add(reader.GetString(0));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"GetTags() error: {ex.Message}");
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+            return tagList;
         }
     }
 }
