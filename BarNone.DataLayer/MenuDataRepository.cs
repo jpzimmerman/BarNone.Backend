@@ -23,19 +23,30 @@ namespace BarNone.DataLayer
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                connection.Open();
-                using var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
+                try
                 {
-                    menuItems.Add(new MenuItem
+                    connection.Open();
+                    using var reader = await command.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Description = reader.GetString(2),
-                        Price = reader.GetFloat(4),
-                        Category = reader.GetString(6),
-                        Tags = ["Sweet", "Citrusy"]
-                    });
+                        menuItems.Add(new MenuItem
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1),
+                            Description = reader.GetString(2),
+                            Price = reader.GetFloat(4),
+                            Category = reader.GetString(6),
+                            Tags = ["Sweet", "Citrusy"]
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"GetAllMenuItems() error: {ex.Message}");
+                }
+                finally 
+                {
+                    await connection.CloseAsync();
                 }
             }
 
@@ -122,6 +133,7 @@ namespace BarNone.DataLayer
 
             using (var connection = new MySqlConnection(_connection.ConnectionString))
             {
+
                 var command = new MySqlCommand(Constants.GetTagsSp, connection)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -139,13 +151,13 @@ namespace BarNone.DataLayer
                 {
                     Console.WriteLine($"GetTags() error: {ex.Message}");
                 }
-                finally 
+                finally
                 {
                     await connection.CloseAsync();
                 }
             }
-
             return menuItems;
+
         }
 
         public async Task<IEnumerable<TagCocktailMapItem>> GetTagCocktailMap()
