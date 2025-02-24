@@ -16,20 +16,28 @@ namespace BarNone.BusinessLogic.Services
 
         public async Task<IEnumerable<IMenuItem>> GetAllMenuItems()
         {
-            var menuItems = await _dataRepository.GetAllMenuItems();
-            var tagsCocktailsMap = await _dataRepository.GetTagCocktailMap();
-
-            foreach (var menuItem in menuItems)
+            try
             {
-                MenuItemBuilder builder = new(menuItem);
-                IEnumerable<string> itemTags =
-                    from entry in tagsCocktailsMap
-                    where entry.DrinkId == menuItem.Id
-                    select entry.TagName;
+                var menuItems = await _dataRepository.GetAllMenuItems();
+                var tagsCocktailsMap = await _dataRepository.GetTagCocktailMap();
 
-                builder.AddTags(itemTags.ToArray()).Build();
+                foreach (var menuItem in menuItems)
+                {
+                    MenuItemBuilder builder = new(menuItem);
+                    IEnumerable<string> itemTags =
+                        from entry in tagsCocktailsMap
+                        where entry.DrinkId == menuItem.Id
+                        select entry.TagName;
+
+                    builder.AddTags(itemTags.ToArray()).Build();
+                }
+                return menuItems;
             }
-            return menuItems;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetMenuItems() exception: {ex.Message}");
+                return [];
+            }
         }
 
         public async Task AddOrder(GuestOrder order) => await _dataRepository.AddGuestOrder(order);

@@ -10,6 +10,10 @@ This API is a backend for a cocktail menu website. Its endpoints detail menu ite
 
 The API specification is currently built in Swagger, and is hosted here: <a href="https://jpzimmerman.github.io/BarNone.Backend/#/">BarNone API documentation</a>
 
+# Deployment Location:
+
+Staging: barnone-web-app.azurewebsites.net/
+
 # Authentication/Authorization
 
 API supports cookie authentication, as well as Google OAuth authentication for an app-user and an admin. Auth0 tokens will be provided through the use of an API gateway (currently planned to be hosted in AWS), and will provide for an admin and app-user context.
