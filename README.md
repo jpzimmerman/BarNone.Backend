@@ -12,7 +12,7 @@ The API specification is currently built in Swagger, and is hosted here: <a href
 
 # Deployment Location:
 
-Staging: barnone-web-app.azurewebsites.net/
+Staging: <a href="https://barnone-web-app.azurewebsites.net/">BarNone API - Staging</a>
 
 # Authentication/Authorization
 
@@ -34,6 +34,10 @@ To run this application locally:<br>
   <tr>
     <td>Framework</td>
     <td>.NET 9.0</td>
+  </tr>
+  <tr>
+    <td>Hosting</td>
+    <td>Azure app service</td>
   </tr>
   <tr>
     <td>CI/CD Pipeline</td>
