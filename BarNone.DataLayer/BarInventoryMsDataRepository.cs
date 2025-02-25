@@ -1,15 +1,14 @@
 ﻿using BarNone.Models;
-using MySqlConnector;
-using Org.BouncyCastle.Asn1.X509.Qualified;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace BarNone.DataLayer
 {
-    public class BarInventoryDataRepository : DataRepository, IBarInventoryDataRepository
+    public class BarInventoryMsDataRepository : DataRepository, IBarInventoryDataRepository
     {
         private readonly IDbConnection _connection;
 
-        public BarInventoryDataRepository(IDbConnection connection) : base(connection)
+        public BarInventoryMsDataRepository(IDbConnection connection) : base(connection)
         {
             _connection = connection;
         }
@@ -18,9 +17,9 @@ namespace BarNone.DataLayer
         {
             var inventoryItems = new List<Ingredient>();
 
-            using (var connection = new MySqlConnection(_connection.ConnectionString))
+            using (var connection = new SqlConnection(_connection.ConnectionString))
             {
-                var command = new MySqlCommand(Constants.GetInventoryItemsSp, connection)
+                var command = new SqlCommand(Constants.GetInventoryItemsSp, connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };

@@ -4,9 +4,14 @@ using System.Data.Common;
 
 namespace BarNone.DataLayer
 {
-    public class DataRepository(IDbConnection connection) : IDataRepository
+    public class DataRepository : IDataRepository
     {
         private readonly IDbConnection _connection;
+
+        public DataRepository(IDbConnection connection)
+        {
+            _connection = connection;
+        }
 
         public virtual async Task AddItem(string storedProcedureName, Dictionary<string, object> parameters)
         {

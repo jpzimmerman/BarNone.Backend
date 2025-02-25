@@ -14,7 +14,7 @@ namespace BarNone.Models
         public string Description { get; set; } = string.Empty;
 
         [JsonPropertyName("quantity")]
-        public uint Quantity { get; set; }
+        public int Quantity { get; set; }
 
         [JsonPropertyName("isAlcoholic")]
         public bool IsAlcoholic { get; set; }

@@ -6,9 +6,9 @@ namespace BarNone.BusinessLogic.Services
 {
     public class InventoryDataService
     {
-        private readonly BarInventoryDataRepository _dataRepository;
+        private readonly BarInventoryMsDataRepository _dataRepository;
 
-        public InventoryDataService(BarInventoryDataRepository dataRepository)
+        public InventoryDataService(BarInventoryMsDataRepository dataRepository)
         {
             _dataRepository = dataRepository;
         }
