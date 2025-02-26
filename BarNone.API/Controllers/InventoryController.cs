@@ -1,6 +1,7 @@
 ﻿using BarNone.BusinessLogic.Services;
 using BarNone.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BarNone.API.Controllers
 {
@@ -17,6 +18,7 @@ namespace BarNone.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Retrieves all inventory items. Each item will have an id, a name, a description, a quantity, and whether or not the item contains alcohol.")]
         [Route("GetInventoryItems")]
         public async Task<IEnumerable<Ingredient>> GetInventoryItems() => await _inventoryDataService.GetInventoryItems();
 
