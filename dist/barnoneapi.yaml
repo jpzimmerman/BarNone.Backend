@@ -10,10 +10,11 @@ paths:
       responses:
         "200":
           description: OK
-  /api/Inventory:
+  /api/Inventory/GetInventoryItems:
     get:
       tags:
         - Inventory
+      summary: Retrieves all inventory items. Each item will have an id, a name, a description, a quantity, and whether or not the item contains alcohol.
       responses:
         "200":
           description: OK
@@ -30,7 +31,6 @@ paths:
     put:
       tags:
         - Inventory
-      summary: Retrieves all inventory items. Each item will have an id, a name, a description, a quantity, and whether or not the item contains alcohol.
       requestBody:
         content:
           application/json:
