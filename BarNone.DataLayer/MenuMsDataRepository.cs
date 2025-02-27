@@ -41,41 +41,27 @@ namespace BarNone.DataLayer
             {
                 Console.WriteLine($"GetAllMenuItems() error: {ex.Message}");
             }
+
             return menuItems;
         }
 
         public async Task<IEnumerable<TagCocktailMapItem>> GetTagCocktailMap()
         {
             var tagsCocktailsEntries = new List<TagCocktailMapItem>();
-
-            using (var connection = new SqlConnection(_connection.ConnectionString))
+            try
             {
-                var command = new SqlCommand(Constants.GetTagCocktailMapSp, connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                try
-                {
-                    connection.Open();
-                    using var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        tagsCocktailsEntries.Add(new TagCocktailMapItem
-                        {
-                            TagId = reader.GetInt32(0),
-                            DrinkId = reader.GetInt32(1),
-                            TagName = reader.GetString(2)
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"GetTagsCocktailsMap() error: {ex.Message}");
-                }
-                finally
-                {
-                    await connection.CloseAsync();
-                }
+                var dataTable = await base.GetItems(Constants.GetTagCocktailMapSp);
+                tagsCocktailsEntries = (from item in dataTable.AsEnumerable()
+                             select new TagCocktailMapItem()
+                             {
+                                 TagId = Convert.ToInt32(item["TagId"]),
+                                 DrinkId = Convert.ToInt32(item["TagId"]),
+                                 TagName = item["TagName"].ToString() ?? string.Empty
+                             }).ToList<TagCocktailMapItem>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetTagCocktailMap() error: {ex.Message}");
             }
 
             return tagsCocktailsEntries;
@@ -95,6 +81,7 @@ namespace BarNone.DataLayer
             {
                 Console.WriteLine($"GetTags() error: {ex.Message}");
             }
+
             return tagList;
         }
     }
