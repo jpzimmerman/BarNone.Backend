@@ -1,14 +1,14 @@
 ﻿using BarNone.Models;
-using System.Data;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace BarNone.DataLayer
 {
-    public class MenuMsDataRepository : IMenuDataRepository
+    public class MenuMsDataRepository : DataRepository, IMenuDataRepository
     {
         private readonly IDbConnection _connection;
 
-        public MenuMsDataRepository(IDbConnection connection)
+        public MenuMsDataRepository(IDbConnection connection) : base(connection)
         {
             _connection = connection;
         }
@@ -20,30 +20,27 @@ namespace BarNone.DataLayer
 
         public async Task<IEnumerable<IMenuItem>> GetAllMenuItems()
         {
-            var menuItems = new List<MenuItem>();
+            var menuItems = new List<IMenuItem>();
 
-            using (var connection = new SqlConnection(_connection.ConnectionString))
+            try
             {
-                var command = new SqlCommand(Constants.GetMenuItemsSp, connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                connection.Open();
-                using var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    menuItems.Add(new MenuItem
-                    {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Description = reader.GetString(2),
-                        Price = (float)reader.GetDouble(4),
-                        Category = reader.GetString(6),
-                        Tags = ["Sweet", "Citrusy"]
-                    });
-                }
-            }
+                var dataTable = await base.GetItems(Constants.GetMenuItemsSp);
+                menuItems = (from item in dataTable.AsEnumerable()
+                             select new MenuItem()
+                             {
+                                 Id = Convert.ToInt32(item["Id"]),
+                                 Name = item["Name"].ToString() ?? string.Empty,
+                                 Description = item["Description"].ToString() ?? string.Empty,
+                                 Price = (float)Convert.ToDouble(item["Price"]),
+                                 Category = item["Category"].ToString() ?? string.Empty,
+                                 Tags = []
+                             }).ToList<IMenuItem>();
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetAllMenuItems() error: {ex.Message}");
+            }
             return menuItems;
         }
 
@@ -86,32 +83,17 @@ namespace BarNone.DataLayer
 
         public async Task<IEnumerable<string>> GetTags()
         {
-            var tagList = new List<string>();
-
-            using (var connection = new SqlConnection(_connection.ConnectionString))
+            var tagList = new List<String>();
+            try
             {
-
-                var command = new SqlCommand(Constants.GetTagsSp, connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                try
-                {
-                    connection.Open();
-                    using var reader = await command.ExecuteReaderAsync();
-                    while (await reader.ReadAsync())
-                    {
-                        tagList.Add(reader.GetString(0));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"GetTags() error: {ex.Message}");
-                }
-                finally
-                {
-                    await connection.CloseAsync();
-                }
+                var dataTable = await base.GetItems(Constants.GetTagsSp);
+                tagList = dataTable.AsEnumerable()
+                    .Select(item => item.Field<String>("TagName") ?? string.Empty)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetTags() error: {ex.Message}");
             }
             return tagList;
         }

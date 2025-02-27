@@ -1,4 +1,6 @@
-﻿using MySqlConnector;
+﻿using BarNone.Models;
+using Microsoft.Data.SqlClient;
+using MySqlConnector;
 using System.Data;
 using System.Data.Common;
 
@@ -11,6 +13,30 @@ namespace BarNone.DataLayer
         public DataRepository(IDbConnection connection)
         {
             _connection = connection;
+        }
+
+        public virtual async Task<DataTable> GetItems(string storedProcedureName)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connection.ConnectionString))
+                {
+                    var command = new SqlCommand(storedProcedureName, connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    connection.Open();
+                    using var reader = await command.ExecuteReaderAsync();
+                    var dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    return dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Generic GetItems() error: {ex.Message}");
+                return new DataTable();
+            }
         }
 
         public virtual async Task AddItem(string storedProcedureName, Dictionary<string, object> parameters)
