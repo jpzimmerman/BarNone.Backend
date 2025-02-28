@@ -1,21 +1,22 @@
 openapi: 3.0.1
 info:
   title: BarNone.API
-  version: '1.0'
+  version: "1.0"
 paths:
   /Admin:
     get:
       tags:
         - Admin
       responses:
-        '200':
+        "200":
           description: OK
-  /api/Inventory:
+  /api/Inventory/GetInventoryItems:
     get:
       tags:
         - Inventory
+      summary: Retrieves all inventory items. Each item will have an id, a name, a description, a quantity, and whether or not the item contains alcohol.
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
@@ -34,22 +35,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: "#/components/schemas/Ingredient"
           text/json:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: "#/components/schemas/Ingredient"
           application/*+json:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: "#/components/schemas/Ingredient"
       responses:
-        '200':
+        "200":
           description: OK
   /api/Menu:
     get:
       tags:
         - Menu
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
@@ -67,31 +68,31 @@ paths:
         - Menu
       summary: Retrieves all menu items.
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MenuItem'
+                  $ref: "#/components/schemas/MenuItem"
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MenuItem'
+                  $ref: "#/components/schemas/MenuItem"
             text/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MenuItem'
+                  $ref: "#/components/schemas/MenuItem"
   /api/Menu/GetTags:
     get:
       tags:
         - Menu
       summary: Retrieves all tags for menu items.
       responses:
-        '200':
+        "200":
           description: OK
           content:
             text/plain:
@@ -121,15 +122,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GuestOrder'
+              $ref: "#/components/schemas/GuestOrder"
           text/json:
             schema:
-              $ref: '#/components/schemas/GuestOrder'
+              $ref: "#/components/schemas/GuestOrder"
           application/*+json:
             schema:
-              $ref: '#/components/schemas/GuestOrder'
+              $ref: "#/components/schemas/GuestOrder"
       responses:
-        '200':
+        "200":
           description: OK
 components:
   schemas:
@@ -151,7 +152,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/MenuItem'
+            $ref: "#/components/schemas/MenuItem"
           nullable: true
         total:
           type: number
