@@ -31,5 +31,8 @@ namespace BarNone.Models
         [JsonPropertyName("tags")]
         public string[] Tags { get; set; }
 
+        [JsonPropertyName("quantity")]
+        public int Quantity { get; set; }
+
     }
 }

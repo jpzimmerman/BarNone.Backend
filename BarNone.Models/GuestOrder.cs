@@ -21,5 +21,16 @@ namespace BarNone.Models
 
         [JsonPropertyName("total")]
         public float Total {  get; set; }
+
+        public float CalculateTotal()
+        {
+            var workingTotal = 0f;
+            foreach (var item in Items)
+            {
+                workingTotal += item.Price * item.Quantity;
+            }
+            Total = workingTotal;
+            return Total;
+        }
     }
 }

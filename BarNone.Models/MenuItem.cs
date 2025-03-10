@@ -14,6 +14,7 @@ namespace BarNone.Models
         public uint NumberOfOrders { get; set; }
         public string SpecialInstructions { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
-        public string[] Tags { get; set; } = Array.Empty<String>();    
+        public string[] Tags { get; set; } = Array.Empty<String>();   
+        public int Quantity { get; set; }
     }
 }
