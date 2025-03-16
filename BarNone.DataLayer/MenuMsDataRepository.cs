@@ -1,6 +1,5 @@
 ﻿using BarNone.Models;
 using Microsoft.Data.SqlClient;
-using MySqlConnector;
 using System.Data;
 
 namespace BarNone.DataLayer
@@ -16,26 +15,26 @@ namespace BarNone.DataLayer
 
         public async Task AddGuestOrder(GuestOrder order)
         {
-            var orderId = ulong.MinValue;
+            var orderId = Guid.NewGuid();
             using (var connection = new SqlConnection(_connection.ConnectionString))
             {
                 var command = new SqlCommand(Constants.AddGuestOrderSp, connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                var orderIdCommand = new SqlCommand("SELECT IDENT_CURRENT('orders')", connection)
-                {
-                    CommandType = CommandType.Text
-                };
+                //var orderIdCommand = new SqlCommand("SELECT IDENT_CURRENT('orders')", connection)
+                //{
+                //    CommandType = CommandType.Text
+                //};
 
                 command.Parameters.AddWithValue("@nameForOrder", order.Name);
+                command.Parameters.AddWithValue("@orderGuid", orderId);
                 command.Parameters.AddWithValue("@total", order.Total);
                 command.Parameters.AddWithValue("@specialInstructions", order.SpecialInstructions);
                 try
                 {
                     connection.Open();
                     await command.ExecuteNonQueryAsync();
-                    orderId = Convert.ToUInt64(await orderIdCommand.ExecuteScalarAsync());
                 }
                 catch (Exception ex)
                 {
@@ -50,24 +49,25 @@ namespace BarNone.DataLayer
             await AddOrderItems(orderId, order.Items);
         }
 
-        private async Task AddOrderItems(ulong orderId, IEnumerable<IMenuItem> orderItems)
+        private async Task AddOrderItems(Guid orderId, IEnumerable<IMenuItem> orderItems)
         {
             using (var connection = new SqlConnection(_connection.ConnectionString))
             {
                 var bulkCopy = new SqlBulkCopy(connection)
                 {
-                    DestinationTableName = "orders_cocktails",
+                    DestinationTableName = "dbo.orders_cocktails",
                 };
                 var dataTable = new DataTable();
                 dataTable.Columns.Add("ItemId", typeof(int));
                 dataTable.Columns.Add("OrderId", typeof(int));
+                dataTable.Columns.Add("OrderGuid", typeof(Guid));
                 dataTable.Columns.Add("DrinkId", typeof(int));
                 dataTable.Columns.Add("Quantity", typeof(int));
                 dataTable.Columns.Add("SpecialInstructions", typeof(String));
                 Parallel.ForEach(orderItems, item =>
                 {
                     var itemCopy = dataTable.NewRow();
-                    itemCopy["OrderId"] = orderId;
+                    itemCopy["OrderGuid"] = orderId;
                     itemCopy["DrinkId"] = item.Id;
                     itemCopy["Quantity"] = item.Quantity;
                     itemCopy["SpecialInstructions"] = item.SpecialInstructions;
