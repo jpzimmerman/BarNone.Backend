@@ -127,7 +127,7 @@ namespace BarNone.DataLayer
                              select new TagCocktailMapItem()
                              {
                                  TagId = Convert.ToInt32(item["TagId"]),
-                                 DrinkId = Convert.ToInt32(item["TagId"]),
+                                 DrinkId = Convert.ToInt32(item["DrinkId"]),
                                  TagName = item["TagName"].ToString() ?? string.Empty
                              }).ToList<TagCocktailMapItem>();
             }
