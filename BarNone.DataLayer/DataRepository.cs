@@ -47,10 +47,10 @@ namespace BarNone.DataLayer
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                foreach (var paramKeyValuePair in parameters)
+                Parallel.ForEach(parameters, paramKeyValuePair =>
                 {
                     command.Parameters.AddWithValue(paramKeyValuePair.Key, paramKeyValuePair.Value);
-                }
+                });
 
                 try
                 {

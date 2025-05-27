@@ -21,7 +21,7 @@ namespace BarNone.BusinessLogic.Services
                 var menuItems = await _dataRepository.GetAllMenuItems();
                 var tagsCocktailsMap = await _dataRepository.GetTagCocktailMap();
 
-                foreach (var menuItem in menuItems)
+                Parallel.ForEach(menuItems, menuItem =>
                 {
                     MenuItemBuilder builder = new(menuItem);
                     IEnumerable<string> itemTags =
@@ -30,7 +30,7 @@ namespace BarNone.BusinessLogic.Services
                         select entry.TagName;
 
                     builder.AddTags(itemTags.ToArray()).Build();
-                }
+                });
                 return menuItems;
             }
             catch (Exception ex)
