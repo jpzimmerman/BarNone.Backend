@@ -1,49 +1,52 @@
-﻿using BarNone.Models;
+﻿using Xunit;
 using Moq;
+using BarNone.DataLayer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Data;
-using Xunit;
 
 namespace BarNone.DataLayer.Tests
 {
-    public class DataRepositoryTests : IDisposable
+    public class MenuMsDataRepositoryTests : IDisposable
     {
+        private Mock<IDbConnection> _connection = new Mock<IDbConnection>();
         private bool disposedValue;
-        private readonly Mock<IDbConnection> _connection = new Mock<IDbConnection>();
 
-        public DataRepositoryTests()
+        public MenuMsDataRepositoryTests()
         {
-            _connection.Setup(m => m.ConnectionString).Returns("Server=sandbox-sqlserver.database.windows.net;Database=cocktails;User ID=bartender;Password=asdf;");
+            _connection.Setup(x => x.ConnectionString).Returns("valid_string");          
         }
 
-        [Fact()]
-        public void DataRepositoryTest()
-        {
-            Xunit.Assert.Fail("This test needs an implementation");
-        }
 
         [Fact()]
-        public async Task GetAllTest()
-        {
-            var dataRepository = new DataRepository(_connection.Object);
-
-            var result = await dataRepository.GetItems(Constants.GetMenuItemsSp);
-
-        }
-
-        [Fact()]
-        public void AddTest()
+        public void MenuMsDataRepositoryTest()
         {
             Xunit.Assert.Fail("This test needs an implementation");
         }
 
         [Fact()]
-        public void DeleteTest()
+        public void AddGuestOrderTest()
         {
             Xunit.Assert.Fail("This test needs an implementation");
         }
 
         [Fact()]
-        public void UpdateTest()
+        public void GetAllMenuItemsTest()
+        {
+            Xunit.Assert.Fail("This test needs an implementation");
+        }
+
+        [Fact()]
+        public void GetTagCocktailMapTest()
+        {
+            Xunit.Assert.Fail("This test needs an implementation");
+        }
+
+        [Fact()]
+        public void GetTagsTest()
         {
             Xunit.Assert.Fail("This test needs an implementation");
         }
@@ -64,7 +67,7 @@ namespace BarNone.DataLayer.Tests
         }
 
         // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~DataRepositoryTests()
+        // ~MenuMsDataRepositoryTests()
         // {
         //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         //     Dispose(disposing: false);

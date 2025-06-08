@@ -22,10 +22,6 @@ namespace BarNone.DataLayer
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                //var orderIdCommand = new SqlCommand("SELECT IDENT_CURRENT('orders')", connection)
-                //{
-                //    CommandType = CommandType.Text
-                //};
 
                 command.Parameters.AddWithValue("@nameForOrder", order.Name);
                 command.Parameters.AddWithValue("@orderGuid", orderId);

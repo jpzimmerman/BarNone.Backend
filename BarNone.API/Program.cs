@@ -4,7 +4,7 @@ using BarNone.DataLayer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
-using MySqlConnector;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 builder.Services.AddTransient<IDbConnection>(_ =>
-    new MySqlConnection(Environment.GetEnvironmentVariable("DB_CONNECTION")));
+    new SqlConnection(Environment.GetEnvironmentVariable("DB_CONNECTION")));
 builder.Services.AddSingleton<IMenuDataRepository, MenuMsDataRepository>();
 builder.Services.AddSingleton<BarInventoryMsDataRepository, BarInventoryMsDataRepository>();
 builder.Services.AddSingleton<DataRepository, DataRepository>();
