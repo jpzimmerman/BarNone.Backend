@@ -26,7 +26,7 @@ namespace BarNone.BusinessLogic.Services.Tests
         }
 
         [Fact()]
-        public async Task GetAllMenuItemsTest()
+        public async Task GetAllMenuItems_HappyPath_ExpectingReturnedListToMatchTestData()
         {
             // Arrange
             var menuDataService = new MenuDataService(dataRepository: _repositoryMock.Object);
@@ -34,6 +34,20 @@ namespace BarNone.BusinessLogic.Services.Tests
             // Assert
             var result = await menuDataService.GetAllMenuItems();
             
+            // Act
+            Xunit.Assert.Equivalent(new List<IMenuItem>() { singleMenuItem }, result);
+            Xunit.Assert.Equal(singleMenuItem.Tags, result.ToList<IMenuItem>()[0].Tags);
+        }
+
+        [Fact()]
+        public async Task GetAllMenuItems_MismatchedTags_ExpectingDifferentTagList()
+        {
+            // Arrange
+            var menuDataService = new MenuDataService(dataRepository: _repositoryMock.Object);
+
+            // Assert
+            var result = await menuDataService.GetAllMenuItems();
+
             // Act
             Xunit.Assert.Equivalent(new List<IMenuItem>() { singleMenuItem }, result);
             Xunit.Assert.Equal(singleMenuItem.Tags, result.ToList<IMenuItem>()[0].Tags);
