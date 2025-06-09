@@ -11,7 +11,9 @@ namespace BarNone.BusinessLogic.Services.Tests
         private readonly Mock<IMenuDataRepository> _repositoryMock;
         private readonly IMenuItem singleMenuItem = new MenuItem() { Id = 0, Name = "Item1", Tags = ["Tag1", "Tag2"] };
         private readonly List<TagCocktailMapItem> _testTagCocktailMap;
-        private readonly MenuItem testData;
+        private readonly MenuItem testItemData;
+        private readonly string[] testTags = ["Tag1", "Tag2"];
+        private readonly string[] testTagData;
 
         public MenuDataServiceTests()
         { 
@@ -20,12 +22,17 @@ namespace BarNone.BusinessLogic.Services.Tests
                 new TagCocktailMapItem() { TagId = 0, DrinkId = 0, TagName = "Tag1"},
                 new TagCocktailMapItem() { TagId = 1, DrinkId = 0, TagName = "Tag2" }
             };
-            var serializedTestData = JsonConvert.SerializeObject(singleMenuItem);
-            testData = JsonConvert.DeserializeObject<MenuItem>(serializedTestData) ?? new MenuItem();
+            var serializedItemsTestData = JsonConvert.SerializeObject(singleMenuItem);
+            testItemData = JsonConvert.DeserializeObject<MenuItem>(serializedItemsTestData) ?? new MenuItem();
+
+            var serializedTagData = JsonConvert.SerializeObject(testTags);
+            testTagData = JsonConvert.DeserializeObject<string[]>(serializedTagData) ?? [];
+
 
 
             _repositoryMock = new Mock<IMenuDataRepository>();
-            _repositoryMock.Setup(m => m.GetAllMenuItems().Result).Returns(value: new List<IMenuItem>() { testData });
+            _repositoryMock.Setup(m => m.GetAllMenuItems().Result).Returns(value: new List<IMenuItem>() { testItemData });
+            _repositoryMock.Setup(m => m.GetTags().Result).Returns(value: ["Tag1","Tag2"]);
             _repositoryMock.Setup(m => m.GetTagCocktailMap().Result).Returns(_testTagCocktailMap);
 
         }
@@ -40,7 +47,7 @@ namespace BarNone.BusinessLogic.Services.Tests
             var result = await menuDataService.GetAllMenuItems();
             
             // Act
-            Xunit.Assert.Equivalent(new List<IMenuItem>() { testData }, result);
+            Xunit.Assert.Equivalent(new List<IMenuItem>() { testItemData }, result);
             Xunit.Assert.Equal(singleMenuItem.Tags, result.ToList<IMenuItem>()[0].Tags);
         }
 
@@ -56,6 +63,33 @@ namespace BarNone.BusinessLogic.Services.Tests
 
             // Act
             Xunit.Assert.NotEqual(singleMenuItem.Tags, result.ToList<IMenuItem>()[0].Tags);
+        }
+
+        [Fact()]
+        public async Task GetAllMenuItems_TagWithNoMatchingDrinkId_ExpectingTagNotToAppearInItemList()
+        {
+            // Arrange
+            var menuDataService = new MenuDataService(dataRepository: _repositoryMock.Object);
+            _testTagCocktailMap.Add(new TagCocktailMapItem() { TagId = 999, DrinkId = 1, TagName = "Tag999" });
+
+            // Assert
+            var result = await menuDataService.GetAllMenuItems();
+
+            // Act
+            Xunit.Assert.DoesNotContain(result, x => x.Tags.Contains("Tag999"));
+        }
+
+        [Fact()]
+        public async Task GetTags_HappyPath_ExpectingTagList()
+        {
+            // Arrange
+            var menuDataService = new MenuDataService(dataRepository: _repositoryMock.Object);
+
+            // Assert
+            var result = await menuDataService.GetTags();
+
+            // Act
+            Xunit.Assert.Equal(testTagData, result);
         }
     }
 }
