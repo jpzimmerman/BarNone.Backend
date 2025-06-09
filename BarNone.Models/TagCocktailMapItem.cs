@@ -1,5 +1,8 @@
-﻿namespace BarNone.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BarNone.Models
 {
+    [ExcludeFromCodeCoverage]
     public class TagCocktailMapItem
     {
         public int TagId {  get; set; }

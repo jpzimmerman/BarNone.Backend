@@ -12,7 +12,7 @@ namespace BarNone.DataLayer.Tests
 {
     public class MenuMsDataRepositoryTests : IDisposable
     {
-        private Mock<IDbConnection> _connection = new Mock<IDbConnection>();
+        private readonly Mock<IDbConnection> _connection = new Mock<IDbConnection>();
         private bool disposedValue;
 
         public MenuMsDataRepositoryTests()

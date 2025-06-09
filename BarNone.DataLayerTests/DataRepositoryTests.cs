@@ -12,7 +12,7 @@ namespace BarNone.DataLayer.Tests
 
         public DataRepositoryTests()
         {
-            _connection.Setup(m => m.ConnectionString).Returns("Server=sandbox-sqlserver.database.windows.net;Database=cocktails;User ID=bartender;Password=asdf;");
+            _connection.Setup(m => m.ConnectionString).Returns("Server=sqlserver;Database=db;User ID=user;Password=pwd;");
         }
 
         [Fact()]
