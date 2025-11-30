@@ -5,7 +5,7 @@ using System.Data;
 
 namespace BarNone.BusinessLogic.Services
 {
-    public class MenuDataService
+    public class MenuDataService : IMenuRetrievalService
     {
         private readonly IMenuDataRepository _dataRepository;
 
